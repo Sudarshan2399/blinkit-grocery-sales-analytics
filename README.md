@@ -6,6 +6,9 @@ Right-click your 'BlinkIT Grocery Data' table, select New measure, and write the
 1. Low Fat Sales (Segmented Revenue)
 Calculates overall performance specifically for low-fat grocery items
 .
+
+
+
 Low Fat Sales = 
 CALCULATE(
     [Total sales], 
