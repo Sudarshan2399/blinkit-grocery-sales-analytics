@@ -1,36 +1,73 @@
 # blinkit-grocery-sales-analytics
 An interactive Power BI dashboard tracking FMCG retail sales, item distributions, and outlet performance metrics (₹1.20M in revenue) across 8,523 products.
 
-Step 1: Create the Additional Core Business Measures
-Right-click your 'BlinkIT Grocery Data' table, select New measure, and write these formula definitions:
-1. Low Fat Sales (Segmented Revenue)
-Calculates overall performance specifically for low-fat grocery items
-.
+# Blinkit Grocery Delivery Analysis (Power BI + Excel)
 
+An enterprise-ready Power BI dashboard tracking FMCG retail sales, item distributions, and outlet performance metrics across 8,523 products. This repository showcases a complete business intelligence solution—from raw Excel data ingestion to advanced DAX data modeling and modern executive UI/UX design.
 
+##  Live Dashboard Preview
+![Blinkit Dashboard](blinkit_dashboard_screeshot.png)
 
+---
+
+##  Key Features & Business Insights Delivered
+
+*   **Executive Performance Dashboard:** Live tracking of **Total Sales (₹1.20M)**, **Average Sales (141)**, **Total Items Sold (8,523)**, and **Average Customer Rating (3.9)** .
+*   **Granular Product Segmentation:** Analysis of sales by fat content (Low Fat vs. Regular) and item categories (such as Fruits, Vegetables, and Snack Foods) .
+*   **Logistics & Outlet Auditing:** Deep-dive analysis of outlet performance broken down by **Location Tier** (Tier 1, 2, and 3), **Establishment Year**, and **Outlet Type** (Supermarket vs. Grocery Store) .
+*   **Dynamic Column Swapping:** Utilizes a custom DAX **Field Parameter** table (`metrics`) to allow executives to dynamically swap the entire metric view of charts with a single click.
+
+---
+
+##  Relational Data Model
+*   **Fact Table:** `BlinkIT Grocery Data`
+*   **Data Source:** Excel/CSV Ingestion (`BlinkIT Grocery Data.xlsx`)
+*   **Localization:** Fully formatted in Indian Rupee (₹) and decimal rounded for clean executive reporting.
+
+---
+
+##  DAX Formulas Library (Engineered Metrics)
+
+Here is the advanced DAX logic designed and implemented for this dashboard:
+
+### 1. Total Sales
+```dax
+Total sales = SUM('BlinkIT Grocery Data'[Sales])
+2. Average Sales
+Avg Sales = AVERAGE('BlinkIT Grocery Data'[Sales])
+3. Number of Items Sold
+NO of items = COUNTROWS('BlinkIT Grocery Data')
+4. Average Rating
+Avg Rating = AVERAGE('BlinkIT Grocery Data'[Rating])
+5. Low Fat Sales Segment
 Low Fat Sales = 
 CALCULATE(
     [Total sales], 
     'BlinkIT Grocery Data'[Item Fat Content] = "Low Fat"
 )
-2. Regular Fat Sales (Segmented Revenue)
-Tracks revenue contribution generated from regular-fat products
-.
+6. Regular Fat Sales Segment
 Regular Fat Sales = 
 CALCULATE(
     [Total sales], 
     'BlinkIT Grocery Data'[Item Fat Content] = "Regular"
 )
-3. Item Sales % of Total (All-Filter Override)
-Calculates the percentage contribution of any filtered item type (such as Fruits & Vegetables or Snack Foods) relative to all item sales
-. It uses the ALL function to safely ignore local chart filters:
+7. Item Sales % of Total (All-Filter Override)
 Item Sales % of Total = 
 DIVIDE(
     [Total sales], 
     CALCULATE([Total sales], ALL('BlinkIT Grocery Data'[Item Type])), 
     0
 )
+8. Dynamic Metrics Selection (Field Parameter Table)
+metrics = {
+    ("Total sales", NAMEOF('BlinkIT Grocery Data'[Total sales]), 0),
+    ("Avg Sales", NAMEOF('BlinkIT Grocery Data'[Avg Sales]), 1),
+    ("NO of items", NAMEOF('BlinkIT Grocery Data'[NO of items]), 2),
+    ("Avg Rating", NAMEOF('BlinkIT Grocery Data'[Avg Rating]), 3),
+    ("Item Sales % of Total", NAMEOF('BlinkIT Grocery Data'[Item Sales % of Total]), 4),
+    ("Low Fat Sales", NAMEOF('BlinkIT Grocery Data'[Low Fat Sales]), 5),
+    ("Regular Fat Sales", NAMEOF('BlinkIT Grocery Data'[Regular Fat Sales]), 6)
+}
 Step 2: Expand Your Dynamic Field Parameter Table (metrics)
 Using Power BI's modern field parameter table syntax, you can add these newly created calculations as selectable columns.
 Replace your existing metrics table expression with this fully loaded version:
